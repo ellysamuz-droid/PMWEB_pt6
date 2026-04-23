@@ -24,13 +24,10 @@ if (mysqli_num_rows($result) > 0) {
         $_SESSION['email'] = $data['email'];
         $_SESSION['role'] = $data['role'];
 
-        // Ganti baris header sementara menjadi echo untuk melihat apakah login tembus
         if ($data['role'] == 'admin') {
-            echo "Login Sukses sebagai Admin. ID: " . $_SESSION['id'];
-            // header("Location: dashboardadmin.php"); 
+            header("Location: dashboardadmin.php");
         } else {
-            echo "Login Sukses sebagai User";
-            // header("Location: dashboard.php");
+            header("Location: dashboard.php");
         }
         exit;
 
