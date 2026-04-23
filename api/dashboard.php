@@ -205,7 +205,7 @@ if (!isset($_SESSION['id'])) {
         </div>
     </nav>
 
-    <img src="Remind Imunisasi.jpg" class="img-fluid" alt="banner">
+    <img src="../Remind Imunisasi.jpg" class="img-fluid" alt="banner">
 
     <div class="container my-5 py-3">
 
@@ -214,7 +214,7 @@ if (!isset($_SESSION['id'])) {
 
                 <div class="main-hero-section">
                     <div class="row g-0 align-items-center"> <div class="col-md-7 doctor-img-container p-4 p-md-5">
-                            <img src="homekartun.jpg" class="img-fluid doctor-img shadow-sm" alt="Ilustrasi Dokter & Bayi Sehat">
+                            <img src="../homekartun.jpg" class="img-fluid doctor-img shadow-sm" alt="Ilustrasi Dokter & Bayi Sehat">
                         </div>
 
                         <div class="col-md-5 solution-text-container">
@@ -250,7 +250,7 @@ if (!isset($_SESSION['id'])) {
         <div class="row"> 
             <div class="col"> 
                 <div class="card h-100"> 
-                    <img src="imunisasi1.jpg" class="card-img-top" alt="manfaatimunsasi"> 
+                    <img src="../imunisasi1.jpg" class="card-img-top" alt="manfaatimunsasi"> 
                     <div class="card-body d-flex flex-column"> 
                         <h5 class="card-title  fw-bold">Manfaat Imunisasi</h5> 
                         <p class="card-text">Dengan memberikan imunisasi pada anak sejak dini, kita membantu membangun sistem kekebalan tubuh yang kuat dan melindungi mereka dari penyakit yang dapat dicegah.</p> 
@@ -260,7 +260,7 @@ if (!isset($_SESSION['id'])) {
             </div> 
             <div class="col"> 
                 <div class="card h-100"> 
-                    <img src="imunisasi2.jpg" class="card-img-top" alt="Jadwal&Jenis Imunisasi"> 
+                    <img src="../imunisasi2.jpg" class="card-img-top" alt="Jadwal&Jenis Imunisasi"> 
                     <div class="card-body d-flex flex-column"> 
                         <h5 class="card-title fw-bold">Jadwal dan Jenis Imunisasi</h5> 
                         <p class="card-text">AImunisasi rutin lengkap merupakan salah satu cara yang efektif dalam mencegah penyebaran penyakit</p> 
@@ -270,7 +270,7 @@ if (!isset($_SESSION['id'])) {
             </div> 
             <div class="col"> 
                 <div class="card h-100"> 
-                    <img src="imunisasi3.jpg" class="card-img-top" alt="Dampak Negatif Bayi Tidak Imunisasi"> 
+                    <img src="../imunisasi3.jpg" class="card-img-top" alt="Dampak Negatif Bayi Tidak Imunisasi"> 
                     <div class="card-body d-flex flex-column"> 
                         <h5 class="card-title fw-bold">Dampak Negatif Bayi Tidak Imunisasi</h5> 
                         <p class="card-text">Anak lebih rentan terkena masalah kesehatan lain akibat malnutrisi. Pasalnya, anak yang berstatus gizi buruk memiliki risiko mudah terserang infeksi akibat penurunan daya tahan tubuh.</p> 

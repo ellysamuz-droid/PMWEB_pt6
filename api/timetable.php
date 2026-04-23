@@ -21,7 +21,7 @@
         }
 
         .bg-imunisasi {
-            background-image: url("bgimunisasi.jpg");
+            background-image: url("../bgimunisasi.jpg");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
