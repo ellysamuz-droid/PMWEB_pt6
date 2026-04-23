@@ -11,7 +11,7 @@
     <style>
         body{
             height:100vh;
-            background-image: url('login.jpg');
+            background-image: url("../login.jpg");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
