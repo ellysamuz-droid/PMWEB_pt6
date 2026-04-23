@@ -107,6 +107,45 @@ $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
     </style>
 </head>
 
+<script>
+    fetch('bps_imunisasi.php')
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+
+        let tbody = document.getElementById("dataBPS");
+        tbody.innerHTML = "";
+
+        let provinsi = data.vervar;        // daftar provinsi
+        let isiData = data.datacontent;    // nilai
+
+        if (provinsi && isiData) {
+            provinsi.forEach(prov => {
+                let kode = prov.val;
+
+                // cari key yang mengandung kode provinsi
+                let nilai = null;
+                for (let key in isiData) {
+                    if (key.startsWith(kode)) {
+                        nilai = isiData[key];
+                        break;
+                    }
+                }
+
+                let row = `<tr>
+                    <td>${prov.label}</td>
+                    <td>${nilai !== null ? nilai + " %" : "-"}</td>
+                </tr>`;
+
+                tbody.innerHTML += row;
+            });
+        } else {
+            tbody.innerHTML = "<tr><td colspan='2'>Data tidak ditemukan</td></tr>";
+        }
+    })
+    .catch(err => console.log(err));
+</script>
+
 <body>
     <div class="sidebar shadow">
         <div class="sidebar-header">
@@ -171,7 +210,18 @@ $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
                     </table>
                 </div>
             </div>
-
+            <div class="glass-card p-4 mt-4">
+                <h4>Data Statistik BPS</h4>
+                <table class="table table-bordered text-white">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Nilai</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataBPS"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 

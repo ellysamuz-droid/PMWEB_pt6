@@ -1,10 +1,3 @@
-<?php
-include 'koneksi.php';
-
-$query = mysqli_query($koneksi, "SELECT * FROM data_anak ORDER BY id_anak DESC LIMIT 1");
-$data = mysqli_fetch_assoc($query);
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,17 +78,14 @@ $data = mysqli_fetch_assoc($query);
                         <div class="mb-3">
                             <p>
                                 <strong>Nama Anak :</strong>
-                                <span id="namaAnak" class="fw-bold fs-6">
-                                    <?php echo isset($data['nama_anak']) ? $data['nama_anak'] : 'Nama tidak ditemukan'; ?>
-                                </span>
+                                <span id="namaAnak" class="fw-bold fs-6"></span>
                             </p>
                         </div>
                         <table class="table table-bordered table-hover table-center">
                             <thead class="table-header">
                                 <tr>
-                                    <th>Usia</th>
                                     <th>Tanggal Imunisasi</th>
-                                    <th>Jenis Imunisasi</th>
+                                    <th>Jenis Vaksin</th>
                                 </tr>
                             </thead>
                             <tbody id="jadwalTable"></tbody>
@@ -107,41 +97,51 @@ $data = mysqli_fetch_assoc($query);
     </div>
 
     <script>
-        const tglLahir = "<?php echo $data['tanggal_lahir_anak']; ?>";
+        fetch('prosestimetable.php')
+        .then(response => response.json())
+        .then(res => {
+            if (res.error) {
+                alert(res.error);
+                return;
+            }
 
-        if (tglLahir) {
-        const lahir = new Date(tglLahir);
-        const tabel = document.getElementById("jadwalTable");
-        
-        const daftarVaksin = [
-            {bulan: 0, usia: "0-24 jam", vaksin: "Hepatitis B, Polio 0"},
-            {bulan: 1, usia: "1 Bulan", vaksin: "BCG"},
-            {bulan: 2, usia: "2 Bulan", vaksin: "DPT-HB-Hib 1, Polio 1"},
-            {bulan: 3, usia: "3 Bulan", vaksin: "DPT-HB-Hib 2, Polio 2"},
-            {bulan: 4, usia: "4 Bulan", vaksin: "DPT-HB-Hib 3, Polio 3"},
-            {bulan: 9, usia: "9 Bulan", vaksin: "MR / Campak"},
-            {bulan: 18, usia: "18 Bulan", vaksin: "Booster DPT-HB-Hib"}
-        ];
+            document.getElementById("namaAnak").textContent = res.nama_anak;
 
-        tabel.innerHTML = ""; // Bersihkan tabel
+            const tglLahir = res.tanggal_lahir;
+            const lahir = new Date(tglLahir);
+            const tabel = document.getElementById("jadwalTable");
+            
+            const daftarVaksin = [
+                {bulan: 0, usia: "0-24 jam", vaksin: "Hepatitis B, Polio 0"},
+                {bulan: 1, usia: "1 Bulan", vaksin: "BCG"},
+                {bulan: 2, usia: "2 Bulan", vaksin: "DPT-HB-Hib 1, Polio 1"},
+                {bulan: 3, usia: "3 Bulan", vaksin: "DPT-HB-Hib 2, Polio 2"},
+                {bulan: 4, usia: "4 Bulan", vaksin: "DPT-HB-Hib 3, Polio 3"},
+                {bulan: 9, usia: "9 Bulan", vaksin: "MR / Campak"},
+                {bulan: 18, usia: "18 Bulan", vaksin: "Booster DPT-HB-Hib"}
+            ];
 
-        daftarVaksin.forEach(function(item) {
-            let tglImunisasi = new Date(lahir);
-            tglImunisasi.setMonth(tglImunisasi.getMonth() + item.bulan);
+            tabel.innerHTML = ""; // Bersihkan tabel
 
-            // Format tanggal ke Indonesia (dd/mm/yyyy)
-            let tglIndo = tglImunisasi.toLocaleDateString('id-ID', {
-                day: '2-digit', month: '2-digit', year: 'numeric'
+            daftarVaksin.forEach(function(item) {
+                let tglImunisasi = new Date(lahir);
+                tglImunisasi.setMonth(tglImunisasi.getMonth() + item.bulan);
+
+                // Format tanggal ke Indonesia (dd/mm/yyyy)
+                let tglIndo = tglImunisasi.toLocaleDateString('id-ID', {
+                    day: '2-digit', month: '2-digit', year: 'numeric'
+                });
+
+                let row = `<tr>
+                    <td>${tglIndo}</td>
+                    <td>${item.vaksin}</td>
+                </tr>`;
+                tabel.innerHTML += row;
             });
-
-            let row = `<tr>
-                <td>${item.usia}</td>
-                <td>${tglIndo}</td>
-                <td>${item.vaksin}</td>
-            </tr>`;
-            tabel.innerHTML += row;
+        })
+        .catch(err => {
+            console.log("error: ", err);
         });
-    }
     </script>
 
     <div class="container mt-5">

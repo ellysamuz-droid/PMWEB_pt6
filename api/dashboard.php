@@ -252,7 +252,7 @@ if (!isset($_SESSION['id'])) {
                 <div class="card h-100"> 
                     <img src="imunisasi1.jpg" class="card-img-top" alt="manfaatimunsasi"> 
                     <div class="card-body d-flex flex-column"> 
-                        <h5 class="card-title">Manfaat Imunisasi</h5> 
+                        <h5 class="card-title  fw-bold">Manfaat Imunisasi</h5> 
                         <p class="card-text">Dengan memberikan imunisasi pada anak sejak dini, kita membantu membangun sistem kekebalan tubuh yang kuat dan melindungi mereka dari penyakit yang dapat dicegah.</p> 
                         <a href="https://rstmc.co.id/artikel/pentingnya-imunisasi-bagi-anak-melindungi-masa-depan-sehat" class="btn btn-custom mt-auto">Go Link</a> 
                     </div> 
@@ -262,7 +262,7 @@ if (!isset($_SESSION['id'])) {
                 <div class="card h-100"> 
                     <img src="imunisasi2.jpg" class="card-img-top" alt="Jadwal&Jenis Imunisasi"> 
                     <div class="card-body d-flex flex-column"> 
-                        <h5 class="card-title">Jadwal dan Jenis Imunisasi</h5> 
+                        <h5 class="card-title fw-bold">Jadwal dan Jenis Imunisasi</h5> 
                         <p class="card-text">AImunisasi rutin lengkap merupakan salah satu cara yang efektif dalam mencegah penyebaran penyakit</p> 
                         <a href="https://www.alodokter.com/imunisasi" class="btn btn-custom mt-auto">Go Link</a> 
                     </div> 
@@ -272,7 +272,7 @@ if (!isset($_SESSION['id'])) {
                 <div class="card h-100"> 
                     <img src="imunisasi3.jpg" class="card-img-top" alt="Dampak Negatif Bayi Tidak Imunisasi"> 
                     <div class="card-body d-flex flex-column"> 
-                        <h5 class="card-title">Dampak Negatif Bayi Tidak Imunisasi</h5> 
+                        <h5 class="card-title fw-bold">Dampak Negatif Bayi Tidak Imunisasi</h5> 
                         <p class="card-text">Anak lebih rentan terkena masalah kesehatan lain akibat malnutrisi. Pasalnya, anak yang berstatus gizi buruk memiliki risiko mudah terserang infeksi akibat penurunan daya tahan tubuh.</p> 
                         <a href="https://www.halodoc.com/artikel/ketahui-7-dampak-negatif-jika-bayi-tidak-diimunisasi?srsltid=AfmBOoo6NveZzQtC-ItdVFygNyXBonh0FohkLcrUP2NF9IZXsS14bBax" class="btn btn-custom mt-auto">Go Link</a> 
                     </div> 
