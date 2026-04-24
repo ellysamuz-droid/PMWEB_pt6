@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require 'koneksi.php';
 if (!isset($_SESSION['id']) || $_SESSION['role'] != 'admin') {
