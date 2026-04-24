@@ -1,9 +1,11 @@
 <?php
 ob_start();
 session_start();
+
 require 'koneksi.php';
 if (!isset($_SESSION['id']) || $_SESSION['role'] != 'admin') {
     header("Location: loginForm.php"); exit();
+
 }
 $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
 ?>

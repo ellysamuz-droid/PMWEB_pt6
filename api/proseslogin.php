@@ -32,7 +32,7 @@ if (mysqli_num_rows($result) > 0) {
         exit;
 
     } else {
-        echo "Password salah! <a href='loginForm.php'>Kembali</a>";
+        echo "Password salah! <a href='loginForm.php'> Kembali</a>";
     }
 
 } else {
