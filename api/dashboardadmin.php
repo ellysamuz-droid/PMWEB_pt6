@@ -1,9 +1,16 @@
 <?php
 ob_start();
+ob_start();
 session_start();
+
+// TAMBAHKAN DUA BARIS INI UNTUK DEBUGGING:
+var_dump($_SESSION); 
+die();
+
 require 'koneksi.php';
 if (!isset($_SESSION['id']) || $_SESSION['role'] != 'admin') {
     header("Location: loginForm.php"); exit();
+
 }
 $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
 ?>
