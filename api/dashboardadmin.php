@@ -3,13 +3,6 @@ ob_start();
 ob_start();
 session_start();
 
-<<<<<<< HEAD
-=======
-// TAMBAHKAN DUA BARIS INI UNTUK DEBUGGING:
-var_dump($_SESSION); 
-die();
-
->>>>>>> 818138b50c25387c46246302b4150aec403d262b
 require 'koneksi.php';
 if (!isset($_SESSION['id']) || $_SESSION['role'] != 'admin') {
     header("Location: loginForm.php"); exit();
