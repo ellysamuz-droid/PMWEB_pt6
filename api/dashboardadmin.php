@@ -210,7 +210,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
                                     <a href="editdata.php?id=<?= $row['id']; ?>" class="btn-action btn-edit me-1">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
-                                    <a href="proses/prosesHapus.php?id=<?= $row['id']; ?>" 
+                                    <a href="proseshapus.php?id=<?= $row['id']; ?>" 
                                        class="btn-action btn-delete" 
                                        onclick="return confirm('Yakin ingin menghapus pengguna ini?')">
                                         <i class="fas fa-trash"></i> Hapus

@@ -2,7 +2,7 @@
 ob_start();
 require 'koneksi.php';
 
-// Ganti session dengan cookie
+// Cek cookie auth
 if (!isset($_COOKIE['auth_token'])) {
     header("Location: /api/loginForm.php");
     exit();
@@ -16,16 +16,20 @@ if ($userRole != 'admin') {
     exit();
 }
 
-$id           = $_POST['id'];
-$username     = $_POST['username'];
-$email        = $_POST['email'];
-$tanggal_lahir = $_POST['tanggal_lahir'];
-$role         = $_POST['role'];
+// Cek apakah id tersedia
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    header("Location: /api/dashboardadmin.php");
+    exit();
+}
 
-$query = "UPDATE pengguna SET username='$username', email='$email', tanggal_lahir='$tanggal_lahir', role='$role' WHERE id='$id'";
+$id = mysqli_real_escape_string($koneksi, $_GET['id']);
+
+$query = "DELETE FROM pengguna WHERE id='$id'";
 
 if (mysqli_query($koneksi, $query)) {
     header("Location: /api/dashboardadmin.php");
     exit();
+} else {
+    echo "Gagal menghapus data: " . mysqli_error($koneksi);
 }
 ?>
