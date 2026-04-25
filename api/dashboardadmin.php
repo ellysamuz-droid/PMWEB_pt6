@@ -207,10 +207,10 @@ $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-center">
-                                    <a href="editdata.php?id=<?= $row['id']; ?>" class="btn-action btn-edit me-1">
+                                    <a href="/api/editdata.php?id=<?= $row['id']; ?>" class="btn-action btn-edit me-1">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
-                                    <a href="proseshapus.php?id=<?= $row['id']; ?>" 
+                                    <a href="/api/proseshapus.php?id=<?= $row['id']; ?>" 
                                        class="btn-action btn-delete" 
                                        onclick="return confirm('Yakin ingin menghapus pengguna ini?')">
                                         <i class="fas fa-trash"></i> Hapus

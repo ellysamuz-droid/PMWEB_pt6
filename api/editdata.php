@@ -86,7 +86,7 @@ if (!$data) {
                    
                     <h2 class="text-center mb-3">Edit Data Pengguna</h2>
 
-                    <form action="prosesEdit.php" method="POST">
+                    <form action="prosesedit.php" method="POST">
                         <input type="hidden" name="id" value="<?php echo $data['id']; ?>">
                         <div class="form-group">
                             <label for="username">Username</label></label>
