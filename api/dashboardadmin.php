@@ -3,6 +3,14 @@ ob_start();
 session_start();
 
 require 'koneksi.php';
+
+echo "Session ID: " . session_id() . "<br>";
+echo "Session data: <pre>";
+print_r($_SESSION);
+echo "</pre>";
+echo "Role: " . ($_SESSION['role'] ?? 'TIDAK ADA') . "<br>";
+exit;
+
 if (!isset($_SESSION['id']) || $_SESSION['role'] != 'admin') {
     header("Location: loginForm.php"); exit();
 }
