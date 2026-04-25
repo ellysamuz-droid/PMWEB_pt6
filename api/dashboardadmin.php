@@ -1,11 +1,21 @@
 <?php
 ob_start();
-session_start();
+
+// Ganti session dengan cookie
+if (!isset($_COOKIE['auth_token'])) {
+    header("Location: /api/loginForm.php"); exit();
+}
+
+$tokenData = explode('|', base64_decode($_COOKIE['auth_token']));
+$userId = $tokenData[0] ?? null;
+$userRole = $tokenData[1] ?? null;
+$userEmail = $tokenData[2] ?? null;
+
+if ($userRole != 'admin') {
+    header("Location: /api/loginForm.php"); exit();
+}
 
 require 'koneksi.php';
-if (!isset($_SESSION['id']) || $_SESSION['role'] != 'admin') {
-    header("Location: loginForm.php"); exit();
-}
 $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
 ?>
 
