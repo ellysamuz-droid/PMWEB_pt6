@@ -22,12 +22,12 @@ if (mysqli_num_rows($result) > 0) {
         $_SESSION['email'] = $data['email'];
         $_SESSION['role'] = $data['role'];
 
-        if ($data['role'] == 'admin') {
-            header("Location: dashboardadmin.php");
-        } else {
-            header("Location: dashboard.php");
-        }
-        exit;
+        // ← DEBUG: cek session tersimpan tidak
+        echo "Session setelah login: <pre>";
+        print_r($_SESSION);
+        echo "</pre>";
+        echo "Akan redirect ke: " . ($data['role'] == 'admin' ? 'dashboardadmin.php' : 'dashboard.php');
+        exit; // stop dulu, jangan redirect
     } else {
         echo "Password salah! <a href='loginForm.php'>Kembali</a>";
     }
