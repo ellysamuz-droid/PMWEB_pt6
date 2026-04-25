@@ -4,18 +4,13 @@ session_start();
 
 require 'koneksi.php';
 
+// ← TAMBAH DEBUG INI
 echo "Session ID: " . session_id() . "<br>";
 echo "Session data: <pre>";
 print_r($_SESSION);
 echo "</pre>";
 echo "Role: " . ($_SESSION['role'] ?? 'TIDAK ADA') . "<br>";
-exit;
-
-if (!isset($_SESSION['id']) || $_SESSION['role'] != 'admin') {
-    header("Location: loginForm.php"); exit();
-}
-$query = mysqli_query($koneksi, "SELECT * FROM pengguna");
-?>
+exit; // stop dulu
 
 <!DOCTYPE html>
 <html lang="id">
