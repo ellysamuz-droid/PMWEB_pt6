@@ -1,10 +1,15 @@
 <?php
-session_start();
+ob_start();
 
-if (!isset($_SESSION['id'])) {
-    header("Location: loginForm.php");
-    exit();
+// Ganti session dengan cookie
+if (!isset($_COOKIE['auth_token'])) {
+    header("Location: /api/loginForm.php"); exit();
 }
+
+$tokenData = explode('|', base64_decode($_COOKIE['auth_token']));
+$userId    = $tokenData[0] ?? null;
+$userRole  = $tokenData[1] ?? null;
+$userEmail = $tokenData[2] ?? null;
 ?>
 
 <!DOCTYPE html>
