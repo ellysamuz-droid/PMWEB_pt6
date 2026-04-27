@@ -1,8 +1,9 @@
 <?php
-    session_start();
-    session_destroy();
-    setcookie('username', '', time() - 3600, "/");
+ob_start();
 
-    header("Location: ../login.php");
-    exit();
+// Hapus cookie auth_token
+setcookie('auth_token', '', time() - 3600, '/');
+
+header("Location: /api/loginForm.php");
+exit();
 ?>
