@@ -12,7 +12,7 @@ if (empty($nama_anak) || empty($jenis_kelamin) || empty($tanggal_lahir_anak) || 
     exit;
 }
 
-$cek = mysqli_query($koneksi, "SELECT * FROM data_anak 
+$cek = mysqli_query($koneksi, "SELECT * FROM dataanak 
     WHERE nama_anak='$nama_anak' 
     AND tanggal_lahir_anak='$tanggal_lahir_anak'");
 
@@ -24,7 +24,7 @@ if (mysqli_num_rows($cek) > 0) {
     </script>";
 } else {
     // ✅ kalau belum → insert
-    $query = "INSERT INTO data_anak 
+    $query = "INSERT INTO dataanak 
     (nama_anak, jenis_kelamin, tanggal_lahir_anak, nama_orang_tua, alamat_lengkap) 
     VALUES 
     ('$nama_anak', '$jenis_kelamin', '$tanggal_lahir_anak', '$nama_orang_tua', '$alamat_lengkap')";

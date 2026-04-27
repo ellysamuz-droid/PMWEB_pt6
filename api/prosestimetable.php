@@ -3,7 +3,7 @@ include 'koneksi.php';
 
 header('Content-Type: application/json');
 
-$query = mysqli_query($koneksi, "SELECT * FROM data_anak ORDER BY id_anak DESC LIMIT 1");
+$query = mysqli_query($koneksi, "SELECT * FROM dataanak ORDER BY id_anak DESC LIMIT 1");
 $data = mysqli_fetch_assoc($query);
 
 if (!$data) {
