@@ -1,25 +1,16 @@
 <?php
-include 'koneksi.php';
+    session_start();
+    require 'koneksi.php';
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $tanggal_lahir = $_POST['tanggal_lahir'];
+    $password = $_POST['password'];
+    $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-$username      = $_POST['username'];
-$email         = $_POST['email'];
-$tanggal_lahir = $_POST['tanggal_lahir'];
-$password      = $_POST['password'];
-$role          = $_POST['role'];
-$password_hash = password_hash($password, PASSWORD_DEFAULT);
+    $role = $_POST['role'];
 
-if (empty($username) || empty($email) || empty($tanggal_lahir) || empty($password) || empty($role)) {
-    echo "Semua field wajib diisi!";
-    exit;
-}
-
-$query = "INSERT INTO pengguna (username, email, tanggal_lahir, password, role) 
-          VALUES ('$username', '$email', '$tanggal_lahir', '$password_hash', '$role')";
-$result = mysqli_query($koneksi, $query);
-
-if ($result) {
-    header("Location: dashboardAdmin.php");
-} else {
-    echo "Tambah Data Gagal: " . mysqli_error($koneksi);
-}
+    $query = "INSERT INTO pengguna (username, email, tanggal_lahir, password) VALUES ('$username', '$email', '$tanggal_lahir', '$password_hash')";
+    if(mysqli_query($koneksi, $query)) {
+        header("Location: dashboardadmin.php");
+    }
 ?>
