@@ -1,7 +1,9 @@
 <?php
-    session_start();
-    session_unset(); // Menghapus semua variabel session
-    session_destroy(); // Menghancurkan session
-    header("Location: index.php"); // Kembali ke landing page
-    exit();
+ob_start();
+
+// Hapus cookie auth_token
+setcookie('auth_token', '', time() - 3600, '/');
+
+header("Location: ../index.html");
+exit();
 ?>

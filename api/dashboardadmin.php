@@ -167,7 +167,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
             <a href="dashboardadmin.php" class="active"><i class="fas fa-users me-2"></i> Kelola Pengguna</a>
             <a href="dashboard.php"><i class="fas fa-home me-2"></i> Dashboard User</a>
             <hr class="mx-3 opacity-25">
-            <a href="logout.php" class="text-warning"><i class="fas fa-sign-out-alt me-2"></i> Keluar</a>
+            <a href="logout.php" class="text-warning"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
         </div>
     </div>
 
