@@ -24,7 +24,7 @@ if (mysqli_num_rows($cek) > 0) {
     </script>";
 } else {
     // ✅ kalau belum → insert
-    $query = "INSERT INTO dataanak 
+    $query = "INSERT INTO dataanak   
     (nama_anak, jenis_kelamin, tanggal_lahir_anak, nama_orang_tua, alamat_lengkap) 
     VALUES 
     ('$nama_anak', '$jenis_kelamin', '$tanggal_lahir_anak', '$nama_orang_tua', '$alamat_lengkap')";
