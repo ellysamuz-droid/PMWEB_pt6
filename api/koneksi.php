@@ -42,31 +42,22 @@ class Database
 
     private function connect(): void
     {
-        $mysqli = mysqli_init();
+        // ✅ Pakai new mysqli biasa dengan flag SSL di connection string
+        $mysqli = new mysqli();
 
-        if (!$mysqli) {
-            throw new RuntimeException('mysqli_init() gagal.');
-        }
-
-        // ✅ Gunakan MYSQLI_OPT_SSL_VERIFY_SERVER_CERT = false
-        // agar tidak perlu file certificate fisik (aman untuk TiDB Cloud)
-        $mysqli->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, false);
-        $mysqli->ssl_set(null, null, null, null, null);
-
-        $connected = mysqli_real_connect(
-            $mysqli,
+        $mysqli->real_connect(
             $this->host,
             $this->user,
             $this->pass,
             $this->db,
             $this->port,
             null,
-            MYSQLI_CLIENT_SSL
+            MYSQLI_CLIENT_SSL | MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT
         );
 
-        if (!$connected) {
+        if ($mysqli->connect_errno) {
             throw new RuntimeException(
-                'Koneksi ke TiDB Cloud gagal: ' . mysqli_connect_error()
+                'Koneksi ke TiDB Cloud gagal: ' . $mysqli->connect_error
             );
         }
 
@@ -100,7 +91,7 @@ class Database
     public function execute(string $sql, string $types = '', array $params = []): int
     {
         $stmt         = $this->prepare($sql, $types, $params);
-        $affectedRows = $stmt->affected_rows; // ✅ ambil SEBELUM close
+        $affectedRows = $stmt->affected_rows;
         $stmt->close();
         return $affectedRows;
     }
