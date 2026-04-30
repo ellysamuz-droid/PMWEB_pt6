@@ -1,22 +1,28 @@
 <?php
 ob_start();
 
-// Ganti session dengan cookie
+// Cek cookie auth
 if (!isset($_COOKIE['auth_token'])) {
     header("Location: /api/loginForm.php"); exit();
 }
 
 $tokenData = explode('|', base64_decode($_COOKIE['auth_token']));
-$userId = $tokenData[0] ?? null;
-$userRole = $tokenData[1] ?? null;
+$userId    = $tokenData[0] ?? null;
+$userRole  = $tokenData[1] ?? null;
 $userEmail = $tokenData[2] ?? null;
 
 if ($userRole != 'admin') {
     header("Location: /api/loginForm.php"); exit();
 }
 
-require 'koneksi.php';
-$query = mysqli_query($koneksi, "SELECT * FROM pengguna");
+require __DIR__ . '/koneksi.php';
+
+try {
+    $db   = Database::getInstance();
+    $rows = $db->query("SELECT * FROM pengguna");
+} catch (RuntimeException $e) {
+    die("Gagal mengambil data: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
@@ -115,7 +121,6 @@ $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
 
         .badge-admin { background-color: #dc3545; }
         .badge-user { background-color: #0dcaf0; color: #000; }
-
     </style>
 </head>
 
@@ -123,20 +128,17 @@ $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
     fetch('bps_imunisasi.php')
     .then(res => res.json())
     .then(data => {
-        console.log(data);
-
         let tbody = document.getElementById("dataBPS");
         tbody.innerHTML = "";
 
-        let provinsi = data.vervar;        // daftar provinsi
-        let isiData = data.datacontent;    // nilai
+        let provinsi = data.vervar;
+        let isiData  = data.datacontent;
 
         if (provinsi && isiData) {
             provinsi.forEach(prov => {
-                let kode = prov.val;
-
-                // cari key yang mengandung kode provinsi
+                let kode  = prov.val;
                 let nilai = null;
+
                 for (let key in isiData) {
                     if (key.startsWith(kode)) {
                         nilai = isiData[key];
@@ -144,12 +146,10 @@ $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
                     }
                 }
 
-                let row = `<tr>
+                tbody.innerHTML += `<tr>
                     <td>${prov.label}</td>
                     <td>${nilai !== null ? nilai + " %" : "-"}</td>
                 </tr>`;
-
-                tbody.innerHTML += row;
             });
         } else {
             tbody.innerHTML = "<tr><td colspan='2'>Data tidak ditemukan</td></tr>";
@@ -173,7 +173,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
 
     <div class="main-content">
         <div class="container-fluid">
-            
+
             <div class="d-flex justify-content-between align-items-center mb-5">
                 <h2 class="fw-bold"><i class="fas fa-database me-3"></i>Manajemen Pengguna</h2>
                 <a href="tambahdata.php" class="btn btn-custom px-4 py-2 shadow-sm">
@@ -194,15 +194,15 @@ $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
                             </tr>
                         </thead>
                         <tbody>
-                            <?php while($row = mysqli_fetch_assoc($query)) : ?>
+                            <?php foreach ($rows as $row) : ?>
                             <tr>
-                                <td class="fw-bold"><?= $row['username']; ?></td>
-                                <td><?= $row['email']; ?></td>
-                                <td><i class="far fa-calendar-alt me-2 opacity-50"></i><?= $row['tanggal_lahir']; ?></td>
+                                <td class="fw-bold"><?= htmlspecialchars($row['username']); ?></td>
+                                <td><?= htmlspecialchars($row['email']); ?></td>
+                                <td><i class="far fa-calendar-alt me-2 opacity-50"></i><?= htmlspecialchars($row['tanggal_lahir']); ?></td>
                                 <td class="text-center">
-                                    <?php if($row['role'] == 'admin'): ?>
+                                    <?php if ($row['role'] == 'admin') : ?>
                                         <span class="badge bg-danger p-2 px-3"><i class="fas fa-user-shield me-1"></i> Admin</span>
-                                    <?php else: ?>
+                                    <?php else : ?>
                                         <span class="badge bg-info text-dark p-2 px-3"><i class="fas fa-user me-1"></i> User</span>
                                     <?php endif; ?>
                                 </td>
@@ -210,18 +210,19 @@ $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
                                     <a href="/api/editdata.php?id=<?= $row['id']; ?>" class="btn-action btn-edit me-1">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
-                                    <a href="/api/proseshapus.php?id=<?= $row['id']; ?>" 
-                                       class="btn-action btn-delete" 
+                                    <a href="/api/proseshapus.php?id=<?= $row['id']; ?>"
+                                       class="btn-action btn-delete"
                                        onclick="return confirm('Yakin ingin menghapus pengguna ini?')">
                                         <i class="fas fa-trash"></i> Hapus
                                     </a>
                                 </td>
                             </tr>
-                            <?php endwhile; ?>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
             </div>
+
             <div class="glass-card p-4 mt-4">
                 <h4>Data Statistik BPS</h4>
                 <table class="table table-bordered text-white">
@@ -234,6 +235,7 @@ $query = mysqli_query($koneksi, "SELECT * FROM pengguna");
                     <tbody id="dataBPS"></tbody>
                 </table>
             </div>
+
         </div>
     </div>
 
