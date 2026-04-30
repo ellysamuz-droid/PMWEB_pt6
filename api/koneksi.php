@@ -96,9 +96,10 @@ class Database
 
     public function execute(string $sql, string $types = '', array $params = []): int
     {
-        $stmt = $this->prepare($sql, $types, $params);
+        $stmt         = $this->prepare($sql, $types, $params);
+        $affectedRows = $stmt->affected_rows; // ✅ ambil SEBELUM close
         $stmt->close();
-        return $stmt->affected_rows;
+        return $affectedRows;
     }
 
     public function lastInsertId(): int
