@@ -1,5 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 ob_start();
+
 require __DIR__ . '/koneksi.php';
 
 $email    = $_POST['email']    ?? '';
@@ -41,6 +44,9 @@ try {
     exit;
 
 } catch (RuntimeException $e) {
-    echo "Terjadi kesalahan: " . $e->getMessage();
+    echo "<b>ERROR LENGKAP:</b> " . $e->getMessage() . "<br>";
+    echo "<b>File:</b> " . $e->getFile() . "<br>";
+    echo "<b>Line:</b> " . $e->getLine() . "<br>";
+    echo "<pre>" . $e->getTraceAsString() . "</pre>";
 }
 ?>
