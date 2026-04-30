@@ -1,40 +1,47 @@
 <?php
 include 'koneksi.php';
 
-$nama_anak = $_POST['nama_anak'];
-$jenis_kelamin = $_POST['jenis_kelamin'];
-$tanggal_lahir_anak = $_POST['tanggal_lahir_anak'];
-$nama_orang_tua = $_POST['nama_orang_tua'];
-$alamat_lengkap = $_POST['alamat_lengkap'];
+$nama_anak          = $_POST['nama_anak']          ?? '';
+$jenis_kelamin      = $_POST['jenis_kelamin']       ?? '';
+$tanggal_lahir_anak = $_POST['tanggal_lahir_anak']  ?? '';
+$nama_orang_tua     = $_POST['nama_orang_tua']      ?? '';
+$alamat_lengkap     = $_POST['alamat_lengkap']      ?? '';
 
 if (empty($nama_anak) || empty($jenis_kelamin) || empty($tanggal_lahir_anak) || empty($nama_orang_tua) || empty($alamat_lengkap)) {
     echo "Semua wajib diisi!";
     exit;
 }
 
-$cek = mysqli_query($koneksi, "SELECT * FROM dataanak 
-    WHERE nama_anak='$nama_anak' 
-    AND tanggal_lahir_anak='$tanggal_lahir_anak'");
+try {
+    $db = Database::getInstance();
 
-if (mysqli_num_rows($cek) > 0) {
-    // ❗ kalau sudah ada → tidak insert
-    echo "<script>
-        alert('Data anak sudah terdaftar!');
-        window.location='timetable.php';
-    </script>";
-} else {
-    // ✅ kalau belum → insert
-    $query = "INSERT INTO dataanak   
-    (nama_anak, jenis_kelamin, tanggal_lahir_anak, nama_orang_tua, alamat_lengkap) 
-    VALUES 
-    ('$nama_anak', '$jenis_kelamin', '$tanggal_lahir_anak', '$nama_orang_tua', '$alamat_lengkap')";
+    // Cek apakah data anak sudah terdaftar
+    $cek = $db->query(
+        "SELECT id FROM dataanak WHERE nama_anak = ? AND tanggal_lahir_anak = ? LIMIT 1",
+        'ss',
+        [$nama_anak, $tanggal_lahir_anak]
+    );
 
-    $result = mysqli_query($koneksi, $query);
-
-    if ($result){
-        header("Location: timetable.php");
-    } else {
-        echo "Register Gagal: " . mysqli_error($koneksi);
+    if (!empty($cek)) {
+        echo "<script>
+            alert('Data anak sudah terdaftar!');
+            window.location='timetable.php';
+        </script>";
+        exit;
     }
+
+    // Insert data baru
+    $db->execute(
+        "INSERT INTO dataanak (nama_anak, jenis_kelamin, tanggal_lahir_anak, nama_orang_tua, alamat_lengkap) 
+         VALUES (?, ?, ?, ?, ?)",
+        'sssss',
+        [$nama_anak, $jenis_kelamin, $tanggal_lahir_anak, $nama_orang_tua, $alamat_lengkap]
+    );
+
+    header("Location: timetable.php");
+    exit;
+
+} catch (RuntimeException $e) {
+    echo "Register Gagal: " . $e->getMessage();
 }
 ?>

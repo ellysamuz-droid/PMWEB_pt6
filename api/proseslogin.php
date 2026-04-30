@@ -2,35 +2,46 @@
 ob_start();
 include 'koneksi.php';
 
-$email = mysqli_real_escape_string($koneksi, $_POST['email']);
-$password = $_POST['password'];
+$email    = $_POST['email']    ?? '';
+$password = $_POST['password'] ?? '';
 
 if (empty($email) || empty($password)) {
     echo "Email dan Password wajib diisi!";
     exit;
 }
 
-$query = "SELECT * FROM pengguna WHERE email='$email'";
-$result = mysqli_query($koneksi, $query);
+try {
+    $db   = Database::getInstance();
+    $rows = $db->query(
+        "SELECT * FROM pengguna WHERE email = ? LIMIT 1",
+        's',
+        [$email]
+    );
 
-if (mysqli_num_rows($result) > 0) {
-    $data = mysqli_fetch_assoc($result);
-
-    if (password_verify($password, $data['password'])) {
-        // Simpan ke cookie
-        $token = base64_encode($data['id'] . '|' . $data['role'] . '|' . $data['email']);
-        setcookie('auth_token', $token, time() + 3600, '/', '', false, true); // false agar jalan di http juga
-
-        if ($data['role'] == 'admin') {
-            header("Location: /api/dashboardadmin.php");
-        } else {
-            header("Location: /api/dashboard.php");
-        }
+    if (empty($rows)) {
+        echo "Email tidak ditemukan! <a href='/api/loginForm.php'>Kembali</a>";
         exit;
-    } else {
-        echo "Password salah! <a href='/api/loginForm.php'>Kembali</a>";
     }
-} else {
-    echo "Email tidak ditemukan! <a href='/api/loginForm.php'>Kembali</a>";
+
+    $data = $rows[0];
+
+    if (!password_verify($password, $data['password'])) {
+        echo "Password salah! <a href='/api/loginForm.php'>Kembali</a>";
+        exit;
+    }
+
+    // Simpan ke cookie
+    $token = base64_encode($data['id'] . '|' . $data['role'] . '|' . $data['email']);
+    setcookie('auth_token', $token, time() + 3600, '/', '', false, true);
+
+    if ($data['role'] == 'admin') {
+        header("Location: /api/dashboardadmin.php");
+    } else {
+        header("Location: /api/dashboard.php");
+    }
+    exit;
+
+} catch (RuntimeException $e) {
+    echo "Terjadi kesalahan: " . $e->getMessage();
 }
 ?>

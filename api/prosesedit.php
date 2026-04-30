@@ -2,30 +2,44 @@
 ob_start();
 require 'koneksi.php';
 
-// Ganti session dengan cookie
+// Cek cookie auth
 if (!isset($_COOKIE['auth_token'])) {
     header("Location: /api/loginForm.php");
     exit();
 }
 
 $tokenData = explode('|', base64_decode($_COOKIE['auth_token']));
-$userRole = $tokenData[1] ?? null;
+$userRole  = $tokenData[1] ?? null;
 
 if ($userRole != 'admin') {
     header("Location: /api/loginForm.php");
     exit();
 }
 
-$id           = $_POST['id'];
-$username     = $_POST['username'];
-$email        = $_POST['email'];
-$tanggal_lahir = $_POST['tanggal_lahir'];
-$role         = $_POST['role'];
+$id            = $_POST['id']            ?? '';
+$username      = $_POST['username']      ?? '';
+$email         = $_POST['email']         ?? '';
+$tanggal_lahir = $_POST['tanggal_lahir'] ?? '';
+$role          = $_POST['role']          ?? '';
 
-$query = "UPDATE pengguna SET username='$username', email='$email', tanggal_lahir='$tanggal_lahir', role='$role' WHERE id='$id'";
+if (empty($id) || empty($username) || empty($email) || empty($tanggal_lahir) || empty($role)) {
+    echo "Semua field wajib diisi!";
+    exit();
+}
 
-if (mysqli_query($koneksi, $query)) {
+try {
+    $db = Database::getInstance();
+
+    $db->execute(
+        "UPDATE pengguna SET username = ?, email = ?, tanggal_lahir = ?, role = ? WHERE id = ?",
+        'ssssi',
+        [$username, $email, $tanggal_lahir, $role, $id]
+    );
+
     header("Location: /api/dashboardadmin.php");
     exit();
+
+} catch (RuntimeException $e) {
+    echo "Update Gagal: " . $e->getMessage();
 }
 ?>

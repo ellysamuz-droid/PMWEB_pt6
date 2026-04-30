@@ -9,7 +9,7 @@ if (!isset($_COOKIE['auth_token'])) {
 }
 
 $tokenData = explode('|', base64_decode($_COOKIE['auth_token']));
-$userRole = $tokenData[1] ?? null;
+$userRole  = $tokenData[1] ?? null;
 
 if ($userRole != 'admin') {
     header("Location: /api/loginForm.php");
@@ -17,19 +17,26 @@ if ($userRole != 'admin') {
 }
 
 // Cek apakah id tersedia
-if (!isset($_GET['id']) || empty($_GET['id'])) {
+if (empty($_GET['id'])) {
     header("Location: /api/dashboardadmin.php");
     exit();
 }
 
-$id = mysqli_real_escape_string($koneksi, $_GET['id']);
+$id = (int) $_GET['id'];
 
-$query = "DELETE FROM pengguna WHERE id='$id'";
+try {
+    $db = Database::getInstance();
 
-if (mysqli_query($koneksi, $query)) {
+    $db->execute(
+        "DELETE FROM pengguna WHERE id = ?",
+        'i',
+        [$id]
+    );
+
     header("Location: /api/dashboardadmin.php");
     exit();
-} else {
-    echo "Gagal menghapus data: " . mysqli_error($koneksi);
+
+} catch (RuntimeException $e) {
+    echo "Gagal menghapus data: " . $e->getMessage();
 }
 ?>
