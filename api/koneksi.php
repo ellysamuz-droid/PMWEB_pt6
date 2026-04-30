@@ -11,38 +11,28 @@ class Database
     private string $pass;
     private string $db;
 
-    private function __construct(
-        string $host = '',
-        int    $port = 4000,
-        string $user = '',
-        string $pass = '',
-        string $db   = ''
-    ) {
-        $this->host = $host ?: (getenv('TIDB_HOST') ?: '');
-        $this->port = $port ?: (int)(getenv('TIDB_PORT') ?: 4000);
-        $this->user = $user ?: (getenv('TIDB_USER') ?: '');
-        $this->pass = $pass ?: (getenv('TIDB_PASS') ?: '');
-        $this->db   = $db   ?: (getenv('TIDB_DB')   ?: '');
+    private function __construct()
+    {
+        // ✅ Pakai $_ENV dulu, fallback ke getenv(), fallback ke hardcode
+        $this->host = $_ENV['TIDB_HOST'] ?? getenv('TIDB_HOST') ?: 'gateway01.ap-southeast-1.prod.alicloud.tidbcloud.com';
+        $this->port = (int)($_ENV['TIDB_PORT'] ?? getenv('TIDB_PORT') ?: 4000);
+        $this->user = $_ENV['TIDB_USER'] ?? getenv('TIDB_USER') ?: '4E4R7ePMi5xj2AM.root';
+        $this->pass = $_ENV['TIDB_PASS'] ?? getenv('TIDB_PASS') ?: 'YJWuAMvg2BFEYIzj';
+        $this->db   = $_ENV['TIDB_DB']   ?? getenv('TIDB_DB')   ?: 'imun';
 
         $this->connect();
     }
 
-    public static function getInstance(
-        string $host = '',
-        int    $port = 4000,
-        string $user = '',
-        string $pass = '',
-        string $db   = ''
-    ): self {
+    public static function getInstance(): self
+    {
         if (self::$instance === null) {
-            self::$instance = new self($host, $port, $user, $pass, $db);
+            self::$instance = new self();
         }
         return self::$instance;
     }
 
     private function connect(): void
     {
-        // ✅ Pakai new mysqli biasa dengan flag SSL di connection string
         $mysqli = new mysqli();
 
         $mysqli->real_connect(
