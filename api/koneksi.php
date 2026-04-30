@@ -48,7 +48,10 @@ class Database
             throw new RuntimeException('mysqli_init() gagal.');
         }
 
-        mysqli_ssl_set($mysqli, null, null, null, null, null);
+        // ✅ Gunakan MYSQLI_OPT_SSL_VERIFY_SERVER_CERT = false
+        // agar tidak perlu file certificate fisik (aman untuk TiDB Cloud)
+        $mysqli->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, false);
+        $mysqli->ssl_set(null, null, null, null, null);
 
         $connected = mysqli_real_connect(
             $mysqli,
@@ -78,7 +81,7 @@ class Database
 
     public function query(string $sql, string $types = '', array $params = []): array
     {
-        $stmt = $this->prepare($sql, $types, $params);
+        $stmt   = $this->prepare($sql, $types, $params);
         $result = $stmt->get_result();
 
         if ($result === false) {
@@ -141,14 +144,15 @@ class Database
         return $stmt;
     }
 
-    public function close()
+    public function close(): void
     {
         $this->connection->close();
         self::$instance = null;
     }
 
     private function __clone() {}
-    public function __wakeup()
+
+    public function __wakeup(): void
     {
         throw new RuntimeException('Singleton tidak bisa di-unserialize.');
     }
