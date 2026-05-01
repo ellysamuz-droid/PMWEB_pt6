@@ -1,5 +1,5 @@
 <?php
-include 'koneksi.php';
+include __DIR__ . '/koneksi.php';
 
 $nama_anak          = $_POST['nama_anak']          ?? '';
 $jenis_kelamin      = $_POST['jenis_kelamin']       ?? '';
@@ -17,7 +17,7 @@ try {
 
     // Cek apakah data anak sudah terdaftar
     $cek = $db->query(
-        "SELECT id FROM dataanak WHERE nama_anak = ? AND tanggal_lahir_anak = ? LIMIT 1",
+        "SELECT id_anak FROM dataanak WHERE nama_anak = ? AND tanggal_lahir_anak = ? LIMIT 1",
         'ss',
         [$nama_anak, $tanggal_lahir_anak]
     );
