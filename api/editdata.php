@@ -1,16 +1,16 @@
 <?php
 ob_start();
-require 'koneksi.php';
+require __DIR__ . '/koneksi.php';
 
-// Ganti session dengan cookie
+// Cek cookie auth
 if (!isset($_COOKIE['auth_token'])) {
     header("Location: /api/loginForm.php");
     exit();
 }
 
 $tokenData = explode('|', base64_decode($_COOKIE['auth_token']));
-$userId   = $tokenData[0] ?? null;
-$userRole = $tokenData[1] ?? null;
+$userId    = $tokenData[0] ?? null;
+$userRole  = $tokenData[1] ?? null;
 $userEmail = $tokenData[2] ?? null;
 
 if ($userRole != 'admin') {
@@ -18,12 +18,24 @@ if ($userRole != 'admin') {
     exit();
 }
 
-$id = $_GET['id'];
-$query = mysqli_query($koneksi, "SELECT * FROM pengguna WHERE id = '$id'");
-$data = mysqli_fetch_assoc($query);
+$id = (int)($_GET['id'] ?? 0);
 
-if (!$data) {
-    die("Data pengguna tidak ditemukan!");
+if ($id === 0) {
+    die("ID tidak valid!");
+}
+
+try {
+    $db   = Database::getInstance();
+    $rows = $db->query("SELECT * FROM pengguna WHERE id = ? LIMIT 1", 'i', [$id]);
+
+    if (empty($rows)) {
+        die("Data pengguna tidak ditemukan!");
+    }
+
+    $data = $rows[0];
+
+} catch (RuntimeException $e) {
+    die("Gagal mengambil data: " . $e->getMessage());
 }
 ?>
 
@@ -83,30 +95,30 @@ if (!$data) {
             <div class="col-md-7"></div>
             <div class="col-md-5 d-flex align-items-center">
                 <div class="login-box shadow">
-                   
                     <h2 class="text-center mb-3">Edit Data Pengguna</h2>
 
                     <form action="prosesedit.php" method="POST">
-                        <input type="hidden" name="id" value="<?php echo $data['id']; ?>">
+                        <input type="hidden" name="id" value="<?= $data['id']; ?>">
                         <div class="form-group">
-                            <label for="username">Username</label></label>
-                            <input type="text" name="username" value="<?php echo $data['username']; ?>" required>
+                            <label for="username">Username</label>
+                            <input type="text" name="username" value="<?= htmlspecialchars($data['username']); ?>" required>
                         </div>
 
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" name="email" value="<?php echo $data['email']; ?>" required>
+                            <input type="email" name="email" value="<?= htmlspecialchars($data['email']); ?>" required>
                         </div>
 
                         <div class="form-group">
                             <label for="tanggal_lahir">Tanggal Lahir</label>
-                            <input type="date" name="tanggal_lahir" value="<?php echo $data['tanggal_lahir']; ?>" required>
+                            <input type="date" name="tanggal_lahir" value="<?= htmlspecialchars($data['tanggal_lahir']); ?>" required>
                         </div>
+
                         <div class="form-group mb-3">
                             <label for="role" class="form-label">Posisi Pengguna</label>
                             <select name="role" class="form-control" required>
-                                <option value="user" <?php echo ($data['role'] == 'user') ? 'selected' : ''; ?>>User</option>
-                                <option value="admin" <?php echo ($data['role'] == 'admin') ? 'selected' : ''; ?>>Admin</option>
+                                <option value="user"  <?= ($data['role'] == 'user')  ? 'selected' : ''; ?>>User</option>
+                                <option value="admin" <?= ($data['role'] == 'admin') ? 'selected' : ''; ?>>Admin</option>
                             </select>
                         </div>
 
