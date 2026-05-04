@@ -77,6 +77,10 @@
                                 <label for="namaUrtu" class="form-label">Nama Orang Tua</label> 
                                 <input type="text"  class="form-control" name="nama_orang_tua" placeholder="Ayah - Ibu"> 
                             </div> 
+                            <div class="mb-3"> 
+                                <label for="noHp" class="form-label">Nomor HP</label> 
+                                <input type="tel" id="noHp" name="no_hp" class="form-control" placeholder="Contoh: 08123456789" required> 
+                            </div>
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label small fw-bold">Provinsi</label>

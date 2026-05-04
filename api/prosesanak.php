@@ -1,13 +1,17 @@
 <?php
 include __DIR__ . '/koneksi.php';
 
-$nama_anak          = $_POST['nama_anak']          ?? '';
+$nama_anak          = $_POST['nama_anak']           ?? '';
 $jenis_kelamin      = $_POST['jenis_kelamin']       ?? '';
 $tanggal_lahir_anak = $_POST['tanggal_lahir_anak']  ?? '';
 $nama_orang_tua     = $_POST['nama_orang_tua']      ?? '';
-$alamat_lengkap     = $_POST['alamat_lengkap']      ?? '';
+$no_hp              = $_POST['no_hp']               ?? '';
+$wilayah            = $_POST['alamat_lengkap']      ?? '';
+$detail_alamat      = $_POST['alamat_']             ?? '';
 
-if (empty($nama_anak) || empty($jenis_kelamin) || empty($tanggal_lahir_anak) || empty($nama_orang_tua) || empty($alamat_lengkap)) {
+$alamat_lengkap     = trim($detail_alamat . ', ' . $wilayah, ', ');
+
+if (empty($nama_anak) || empty($jenis_kelamin) || empty($tanggal_lahir_anak) || empty($nama_orang_tua) || empty($no_hp) || empty($alamat_lengkap)) {
     echo "Semua wajib diisi!";
     exit;
 }
@@ -32,10 +36,10 @@ try {
 
     // Insert data baru
     $db->execute(
-        "INSERT INTO dataanak (nama_anak, jenis_kelamin, tanggal_lahir_anak, nama_orang_tua, alamat_lengkap) 
+        "INSERT INTO dataanak (nama_anak, jenis_kelamin, tanggal_lahir_anak, nama_orang_tua, no_hp, alamat_lengkap) 
          VALUES (?, ?, ?, ?, ?)",
         'sssss',
-        [$nama_anak, $jenis_kelamin, $tanggal_lahir_anak, $nama_orang_tua, $alamat_lengkap]
+        [$nama_anak, $jenis_kelamin, $tanggal_lahir_anak, $nama_orang_tua, $no_hp, $alamat_lengkap]
     );
 
     header("Location: timetable.php");
